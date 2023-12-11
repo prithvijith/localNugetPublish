@@ -14,8 +14,10 @@ jobs:
               run: dotnet test -c Release --no-build
             - name: Pack nuget
               run : dotnet pack -c Release --no-build 
+            - name: Configure NuGet Source
+              run: echo -e "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<configuration>\n  <packageSources>\n    <add key=\"GitHubPackages\" value=\"https://nuget.pkg.github.com/OWNER/index.json\" />\n  </packageSources>\n  <packageSourceCredentials>\n    <GitHubPackages>\n      <add key=\"Username\" value=\"$GITHUB_ACTOR\" />\n      <add key=\"ClearTextPassword\" value=\"${{secrets.GITHUB_TOKEN}}\" />\n    </GitHubPackages>\n  </packageSourceCredentials>\n</configuration>" > NuGet.Config
             - name: Push to nuget
-              run:  dotnet nuget push "bin/Release/YourPackageName.1.0.0.nupkg" --source "github"
+              run: dotnet nuget push "**/*.nupkg" --source "GitHubPackages" --skip-duplicate
               # run:  dotnet nuget push ./path/to/your.nupkg --source "nuget.org" --api-key ${{ secrets.nuget_api_key }}
   #            run:  dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json
               
