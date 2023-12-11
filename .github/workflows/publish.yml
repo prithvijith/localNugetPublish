@@ -1,0 +1,19 @@
+name: Publish Nuget
+on: push
+jobs:
+    Publish:
+        runs-on : ubuntu-latest
+        steps:
+            - name: checkout
+              uses: actions/checkpout@v3
+            - name: Setup .NET SDK
+              uses: actions/setup-dotnet@v1
+            - name: Build
+              run: dotnet build -c Release
+            - name: Test
+              run: dotnet test -c Release --no-build
+            - name: Pack nuget
+              run : dotnet pack -c Release --no-build --output
+            - name: Push to nuget
+              run:  dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json
+              
