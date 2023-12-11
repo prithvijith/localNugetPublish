@@ -15,7 +15,7 @@ jobs:
             - name: Pack nuget
               run : dotnet pack -c Release --no-build 
             - name: Push to nuget
-              run: dotnet nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.nuget_api_key}}
+              run:  dotnet nuget push ./<project>/out/*.nupkg --skip-duplicate --no-symbols true
               # run:  dotnet nuget push ./path/to/your.nupkg --source "nuget.org" --api-key ${{ secrets.nuget_api_key }}
   #            run:  dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json
               
